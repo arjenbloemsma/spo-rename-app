@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "rename-installation-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/renameInstallation/RenameInstallationWebPart.js",
+          "manifest": "./src/webparts/renameInstallation/RenameInstallationWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "RenameInstallationWebPartStrings": "lib/webparts/renameInstallation/loc/{locale}.js"
+  }
+}
