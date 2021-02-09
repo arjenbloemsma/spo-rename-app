@@ -15,12 +15,13 @@ export interface IRenameInstallationWebPartProps {
 }
 
 // TODO: rewrite to function (no prio; only if time permits)
+// @K: functions kunnen niet makkelijk extenden (kan maar syntax is niet zo nice) ik zou het gewoon laten
 // https://www.digitalocean.com/community/tutorials/five-ways-to-convert-react-class-components-to-functional-components-with-react-hooks
 // https://stackoverflow.com/questions/59487504/how-to-rewrite-a-react-class-that-extends-another-class-as-a-functional-componen
 export default class RenameInstallationWebPart extends BaseClientSideWebPart<IRenameInstallationWebPartProps> {
   public render(): void {
-    // TODO: remove any type
-    const element: any = React.createElement(
+    // @K: JSX.Element
+    const element: JSX.Element = React.createElement(
       AppContext.Provider,
       { value: this.context },
       React.createElement(RenameInstallation, {
@@ -40,6 +41,7 @@ export default class RenameInstallationWebPart extends BaseClientSideWebPart<IRe
   //   return Version.parse("1.0")
   // }
 
+  // @K: lijkt static, kan misscien buiten component
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
