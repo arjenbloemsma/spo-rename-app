@@ -2,7 +2,7 @@ const localStorageKey = '__rename_installation_token__'
 
 // TODO: This is just vanilla JS, need to convert it to TS
 // for now all is defined as any to make it work with TS extenion
-function client(logicAppPostUrl, {body, ...customConfig}) {
+function client(endpoint, {body, ...customConfig}) {
   const token = window.localStorage.getItem(localStorageKey)
   const headers: any = {'content-type': 'application/json'}
   if (token) {
@@ -20,8 +20,10 @@ function client(logicAppPostUrl, {body, ...customConfig}) {
     config.body = JSON.stringify(body)
   }
 
+  console.log('Will be called with', config, `${process.env.REACT_APP_API_URL}/${endpoint}`)
+
   return window
-    .fetch(logicAppPostUrl, config)
+    .fetch(`${process.env.REACT_APP_API_URL}/${endpoint}`, config)
     .then(async response => {
       if (response.status === 401) {
         logout()
