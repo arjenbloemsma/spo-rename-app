@@ -1,13 +1,17 @@
 import * as React from 'react'
 import ValidatedField from './ValidatedField'
 import useValidator from './useValidator'
+import { siteInfoType } from './types'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const isAliasOrUrlValid = useValidator(
   // TODO: replace by the real (async) check via SPO API
+
   (aliasOrUrl: string) =>
-    aliasOrUrl === '' || (aliasOrUrl && aliasOrUrl.indexOf('x') === -1),
+    aliasOrUrl && aliasOrUrl.length >= 3 && !aliasOrUrl.match(/([\<\>!@#\$%^ &\*])+/i),
   (aliasOrUrl: string) =>
-    `The provided alias or URL '${aliasOrUrl}' is not valid`
+    `The provided alias should be at least 3 characters long and not contain invalid characters`
 )
 
 function SiteLoader({ dispatch, siteActionState, getSite }) {
@@ -15,9 +19,21 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
     value: '',
     isButtonDisabled: true,
   })
+
   // TODO: Move styles away from here
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={10000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable={false}
+        pauseOnHover
+      />
       <ValidatedField
         id="siteloader"
         placeholder="Site alias or URL"
@@ -27,23 +43,27 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
           val: string,
           inputIsValid: boolean,
           inputIsChanged: boolean
-        ) => {
+        ) =>
           setSiteLoaderState({
             value: val,
             isButtonDisabled: (val && val.length < 3) || !inputIsValid,
-            // TODO: reduce on valid and changed values so we can determine if
-            // the rename button in
           })
-        }}
+        }
       />
       <button
         disabled={siteLoaderState.isButtonDisabled}
         style={{ margin: '3pt 0 0 0' }}
         onClick={() => {
-          dispatch({
-            type: siteActionState.succes,
-            data: getSite(siteLoaderState.value),
-          })
+          getSite(siteLoaderState.value).then(
+            (data: siteInfoType) => {
+              dispatch({
+                type: siteActionState.succes,
+                data,
+              })
+            },
+            // TODO: define correct type for error
+            (error: any) => toast.error(`😱 ${error.Error}`)
+          )
           setSiteLoaderState({
             value: '',
             isButtonDisabled: true,

@@ -1,17 +1,19 @@
 import * as React from 'react'
-import { getSite } from './SitesApi'
+import { get as getSite, rename as renameSite } from './site-client'
 import ValidatedField from './ValidatedField'
 import useValidator from './useValidator'
 import { siteStateType, siteInfoType } from './types'
 import SiteLoader from './SiteLoader'
-import { siteReducer, siteActionState } from './SiteReducer';
+import { siteReducer, siteActionState } from './SiteReducer'
 
+console.dir(process)
 const isTitleValid = useValidator(
-  (title: string) => title && title.length >= 3 && title.indexOf('/') === -1,
+  (title: string) =>
+    title && title.length >= 3 && !title.match(/([\<\>!@#\$%^\*])+/i),
   'Title is not valid'
 )
 const isTitleAvailable = useValidator(
-  (title: string) => title && title.indexOf('x') === -1,
+  (title: string) => true, //title && title.indexOf('x') === -1,
   'Title is not available'
 )
 
@@ -23,13 +25,13 @@ const initialSiteState: siteStateType = {
 
 function SiteTitleEditor() {
   const [siteState, dispatch] = React.useReducer(siteReducer, initialSiteState)
-  const listItems = siteState.sites.map<siteInfoType>((site): any => {
+  const retrievedSites = siteState.sites.map<siteInfoType>((site): any => {
     return (
-      <li key={site.alias}>
+      <li key={site.Id}>
         <ValidatedField
-          id={site.alias}
-          label={site.alias}
-          initialValue={site.title}
+          id={site.Id}
+          label={site.ServerRelativeUrl}
+          initialValue={site.Title}
           validMessage="Site title is valid"
           validators={[isTitleValid, isTitleAvailable]}
           onChange={(
@@ -53,11 +55,24 @@ function SiteTitleEditor() {
         siteActionState={siteActionState}
         getSite={getSite}
       />
-      <ul>{listItems}</ul>
+      <ul>{retrievedSites}</ul>
       {siteState.sites.length ? (
         <button
-          // TODO: disable button if there aren't any changed and valid sites
-          onClick={() => console.warn('Site renaming not yet implemented')}
+          // TODO: now only works for 1st site in retrievedSites array
+          onClick={() => {
+            const s = siteState.sites[0]
+            renameSite(s.ServerRelativeUrl.replace('/sites/',''), "Arjen", s.Title).then(
+              (data: siteInfoType) => {
+                console.log(`🥳 renamed to ${s.Title}`)
+                dispatch({
+                  type: siteActionState.succes,
+                  data,
+                })
+              },
+              // TODO: define correct type for error
+              (error: any) => console.error(`😱 ${error.Error}`)
+            )
+          }}
         >
           Rename sites
         </button>

@@ -1,7 +1,7 @@
 type siteInfoType = {
-  alias: string
-  title?: string
-  url?: string
+  Id: string
+  Title?: string
+  ServerRelativeUrl?: string
   type?: 'modern' | 'classic'
 }
 
@@ -19,7 +19,6 @@ type siteStateType = {
 
 type validatedFieldStateType = {
   value: string
-  validators: Function[]
   messages: string[]
   isValid: boolean
   isChanged: boolean
@@ -27,6 +26,8 @@ type validatedFieldStateType = {
 
 type validatedFieldActionType = {
   value?: string
+  messages?: string[]
+  isValid?: boolean
   initialState: validatedFieldStateType
   type: string
 }
