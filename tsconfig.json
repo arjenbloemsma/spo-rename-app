@@ -20,6 +20,7 @@
     ],
     "types": [
       "es6-promise",
+      "node",
       "webpack-env"
     ],
     "lib": [
