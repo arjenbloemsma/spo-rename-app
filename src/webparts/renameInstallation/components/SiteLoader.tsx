@@ -1,7 +1,7 @@
 import * as React from 'react'
 import ValidatedField from './ValidatedField'
 import useValidator from './useValidator'
-import { siteInfoType } from './types'
+import { siteInfoType, siteClientErrorType } from './types'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -9,7 +9,9 @@ const isAliasOrUrlValid = useValidator(
   // TODO: replace by the real (async) check via SPO API
 
   (aliasOrUrl: string) =>
-    aliasOrUrl && aliasOrUrl.length >= 3 && !aliasOrUrl.match(/([\<\>!@#\$%^ &\*])+/i),
+    aliasOrUrl &&
+    aliasOrUrl.length >= 3 &&
+    !aliasOrUrl.match(/([\<\>!@#\$%^ &\*])+/i),
   (aliasOrUrl: string) =>
     `The provided alias should be at least 3 characters long and not contain invalid characters`
 )
@@ -61,8 +63,8 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
                 data,
               })
             },
-            // TODO: define correct type for error
-            (error: any) => toast.error(`😱 ${error.Error}`)
+            (error: siteClientErrorType) =>
+              toast.error(`😱 ${error.Error.Message}`)
           )
           setSiteLoaderState({
             value: '',
