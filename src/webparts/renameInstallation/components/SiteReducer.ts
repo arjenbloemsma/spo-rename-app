@@ -1,4 +1,4 @@
-import { siteStateType, siteStateActionType } from './types';
+import { siteStateType, siteStateActionType } from './types'
 
 const siteActionState = {
   pending: 'PENDING',
@@ -10,11 +10,17 @@ const siteActionState = {
 function siteReducer(state: siteStateType, action: siteStateActionType) {
   switch (action.type) {
     case siteActionState.succes: {
+      const sites =
+        state.sites.findIndex(
+          (s) => s.ServerRelativeUrl === action.data.ServerRelativeUrl
+        ) === -1
+          ? [...state.sites, action.data]
+          : state.sites
       return {
         ...state,
         error: null,
         current: action.data,
-        sites: [...state.sites, action.data],
+        sites,
       }
     }
     case siteActionState.error: {
@@ -26,4 +32,4 @@ function siteReducer(state: siteStateType, action: siteStateActionType) {
   }
 }
 
-export {siteReducer, siteActionState}
+export { siteReducer, siteActionState }

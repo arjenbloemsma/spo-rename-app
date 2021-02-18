@@ -2,11 +2,16 @@ import * as React from 'react'
 import { get as getSite, rename as renameSite } from './site-client'
 import ValidatedField from './ValidatedField'
 import useValidator from './useValidator'
-import { siteStateType, siteInfoType } from './types'
+import {
+  siteStateType,
+  siteInfoType,
+  siteClientErrorType,
+  siteUpdateType,
+} from './types'
 import SiteLoader from './SiteLoader'
 import { siteReducer, siteActionState } from './SiteReducer'
+import { toast } from 'react-toastify'
 
-console.dir(process)
 const isTitleValid = useValidator(
   (title: string) =>
     title && title.length >= 3 && !title.match(/([\<\>!@#\$%^\*])+/i),
@@ -24,6 +29,7 @@ const initialSiteState: siteStateType = {
 }
 
 function SiteTitleEditor() {
+  const [sitesToUpdate, setSitesToUpdate] = React.useState<siteUpdateType[]>([])
   const [siteState, dispatch] = React.useReducer(siteReducer, initialSiteState)
   const retrievedSites = siteState.sites.map<siteInfoType>((site): any => {
     return (
@@ -39,8 +45,38 @@ function SiteTitleEditor() {
             inputIsValid: boolean,
             inputIsChanged: boolean
           ) => {
-            // TODO: reduce on valid and changed states so we can determine if
-            // the Rename sites button should be disabled
+            if (inputIsChanged && inputIsValid) {
+              const i = sitesToUpdate.findIndex(
+                (s) => s.ServerRelativeUrl === site.ServerRelativeUrl
+              )
+              if (i === -1) {
+                setSitesToUpdate([
+                  ...sitesToUpdate,
+                  {
+                    ServerRelativeUrl: site.ServerRelativeUrl,
+                    CurrentSiteTitle: site.Title,
+                    SiteTitle: val,
+                  },
+                ])
+              } else {
+                setSitesToUpdate([
+                  ...sitesToUpdate.filter(
+                    (s) => s.ServerRelativeUrl !== site.ServerRelativeUrl
+                  ),
+                  {
+                    ServerRelativeUrl: site.ServerRelativeUrl,
+                    CurrentSiteTitle: site.Title,
+                    SiteTitle: val,
+                  },
+                ])
+              }
+            } else {
+              setSitesToUpdate([
+                ...sitesToUpdate.filter(
+                  (s) => s.ServerRelativeUrl !== site.ServerRelativeUrl
+                ),
+              ])
+            }
           }}
         />
       </li>
@@ -58,20 +94,22 @@ function SiteTitleEditor() {
       <ul>{retrievedSites}</ul>
       {siteState.sites.length ? (
         <button
-          // TODO: now only works for 1st site in retrievedSites array
+          disabled={sitesToUpdate.length === 0}
           onClick={() => {
-            const s = siteState.sites[0]
-            renameSite(s.ServerRelativeUrl.replace('/sites/',''), "Arjen", s.Title).then(
+            sitesToUpdate.forEach((s) => renameSite(
+              s.ServerRelativeUrl.replace('/sites/', ''),
+              s.CurrentSiteTitle,
+              s.SiteTitle
+            ).then(
               (data: siteInfoType) => {
-                console.log(`🥳 renamed to ${s.Title}`)
-                dispatch({
-                  type: siteActionState.succes,
-                  data,
-                })
+                toast.success(
+                  `🥳 Renamed ${s.CurrentSiteTitle} to ${data.Title}`
+                )
+                setSitesToUpdate([])
               },
-              // TODO: define correct type for error
-              (error: any) => console.error(`😱 ${error.Error}`)
-            )
+              (error: siteClientErrorType) =>
+                toast.error(`😱 ${error.Error.Message}`)
+            ))
           }}
         >
           Rename sites

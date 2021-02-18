@@ -32,10 +32,26 @@ type validatedFieldActionType = {
   type: string
 }
 
+type siteUpdateType = {
+  ServerRelativeUrl: string
+  CurrentSiteTitle: string
+  SiteTitle: string
+}
+
+type siteClientErrorType = {
+  Error: {
+    Line: string
+    Message: string
+    Position: string
+  }
+}
+
 export {
+  siteClientErrorType,
   siteInfoType,
   siteStateActionType,
   siteStateType,
+  siteUpdateType,
   validatedFieldStateType,
   validatedFieldActionType,
 }

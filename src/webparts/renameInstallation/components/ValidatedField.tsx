@@ -86,7 +86,7 @@ function ValidatedField({
   const inputId = `${webPartId}-${id}-validatedField`
   return (
     <>
-      {label ? <label htmlFor={inputId}>{label}</label> : null}
+      {label ? <label style={{ paddingRight: '4pt'}} htmlFor={inputId}>{label}</label> : null}
       <input
         id={inputId}
         type="text"
