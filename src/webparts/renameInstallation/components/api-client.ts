@@ -20,10 +20,11 @@ function client(endpoint, {body, ...customConfig}) {
     config.body = JSON.stringify(body)
   }
 
+  console.log(process)
   console.log('Will be called with', config, `${process.env.REACT_APP_API_URL}/${endpoint}`)
 
   return window
-    .fetch(`${process.env.REACT_APP_API_URL}/${endpoint}`, config)
+    .fetch(`${process.env.SPFX_API_URL}/${endpoint}`, config)
     .then(async response => {
       if (response.status === 401) {
         logout()
