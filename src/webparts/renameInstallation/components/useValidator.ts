@@ -1,11 +1,22 @@
+import * as React from 'react'
+
 function useValidator(
   evaluatorFunction: Function,
-  notValidMessage: string | Function
+  notValidMessage: string | Function,
+  fireOnFirstRender: boolean = true
 ) {
+  let isFirstRender = false
+  React.useEffect(() => {
+    isFirstRender = true
+  }, [])
   // TODO: should we enable "strictNullChecks": true, so TS will not allow
   // providing null for processValidationResult
   return (valueToValidate: any, processValidationResult: Function) => {
-    if (evaluatorFunction(valueToValidate)) return
+    if (
+      (isFirstRender && !fireOnFirstRender) ||
+      evaluatorFunction(valueToValidate)
+    )
+      return
     if (processValidationResult) {
       const message =
         typeof notValidMessage === 'function'

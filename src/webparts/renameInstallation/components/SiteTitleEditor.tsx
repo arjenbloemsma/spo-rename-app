@@ -12,16 +12,6 @@ import SiteLoader from './SiteLoader'
 import { siteReducer, siteActionState } from './SiteReducer'
 import { toast } from 'react-toastify'
 
-const isTitleValid = useValidator(
-  (title: string) =>
-    title && title.length >= 3 && !title.match(/([\<\>!@#\$%^\*])+/i),
-  'Title is not valid'
-)
-const isTitleAvailable = useValidator(
-  (title: string) => true, //title && title.indexOf('x') === -1,
-  'Title is not available'
-)
-
 const initialSiteState: siteStateType = {
   current: null,
   sites: [],
@@ -31,6 +21,11 @@ const initialSiteState: siteStateType = {
 function SiteTitleEditor() {
   const [sitesToUpdate, setSitesToUpdate] = React.useState<siteUpdateType[]>([])
   const [siteState, dispatch] = React.useReducer(siteReducer, initialSiteState)
+  const isTitleValid = useValidator(
+    (title: string) =>
+      title && title.length >= 3 && !title.match(/([\<\>!@#\$%^\*])+/i),
+    'Title is not valid'
+  )
   const retrievedSites = siteState.sites.map<siteInfoType>((site): any => {
     return (
       <li key={site.Id}>
@@ -39,7 +34,7 @@ function SiteTitleEditor() {
           label={site.ServerRelativeUrl}
           initialValue={site.Title}
           validMessage="Site title is valid"
-          validators={[isTitleValid, isTitleAvailable]}
+          validators={[isTitleValid]}
           onChange={(
             val: string,
             inputIsValid: boolean,
