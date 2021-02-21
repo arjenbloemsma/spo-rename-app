@@ -17,6 +17,7 @@ function ValidatedField({
   placeholder = undefined,
   validMessage = undefined,
   onChange = undefined,
+  onKeyPress = undefined,
   reducer = validatedFieldReducer,
 }) {
   const webPartId = useWebPartContext((context) => context.instanceId)
@@ -79,6 +80,10 @@ function ValidatedField({
     })
   }
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    onKeyPress && onKeyPress(event)
+  }
+
   // TODO: Move style away from here
   const dangerStyle = {
     border: '1px solid red',
@@ -93,6 +98,7 @@ function ValidatedField({
         value={value}
         placeholder={placeholder}
         onChange={handleChange}
+        onKeyPress={handleKeyPress}
         style={validatedFieldState.isValid ? {} : dangerStyle}
       />
       {!validatedFieldState.isValid ? (
