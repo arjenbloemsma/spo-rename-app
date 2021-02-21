@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 function SiteLoader({ dispatch, siteActionState, getSite }) {
   const [siteLoaderState, setSiteLoaderState] = React.useState({
     value: '',
-    isButtonDisabled: true,
+    isSearchTermValid: false,
     isInputChanged: false,
   })
   const isAliasOrUrlValid = useValidator(
@@ -33,14 +33,13 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
     )
     setSiteLoaderState({
       value: '',
-      isButtonDisabled: true,
+      isSearchTermValid: false,
       isInputChanged: false,
     })
   }
 
-  const handleKeypress = (e) => {
-    //it triggers by pressing the enter key
-    if (e.keyCode === 13) {
+  const handleEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.charCode === 13 && siteLoaderState.isSearchTermValid) {
       loadSiteInfo()
     }
   }
@@ -71,15 +70,15 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
         ) =>
           setSiteLoaderState({
             value: val,
-            isButtonDisabled:
-              !inputIsChanged || (val && val.length < 3) || !inputIsValid,
+            isSearchTermValid:
+              inputIsChanged && inputIsValid && (val && val.length >= 3),
             isInputChanged: inputIsChanged,
           })
         }
-        onKeyPress={handleKeypress}
+        onKeyPress={handleEnterKeyPress}
       />
       <button
-        disabled={siteLoaderState.isButtonDisabled}
+        disabled={!siteLoaderState.isSearchTermValid}
         style={{ margin: '3pt 0 0 0' }}
         onClick={loadSiteInfo}
       >
