@@ -6,18 +6,20 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 function SiteLoader({ dispatch, siteActionState, getSite }) {
-  const isAliasOrUrlValid = useValidator(
-    (aliasOrUrl: string) =>
-      aliasOrUrl &&
-      aliasOrUrl.length >= 3 &&
-      !aliasOrUrl.match(/([\<\>!@#\$%^ &\*])+/i),
-    `The provided alias should be at least 3 characters long and not contain invalid characters`,
-    false
-  )
   const [siteLoaderState, setSiteLoaderState] = React.useState({
     value: '',
     isButtonDisabled: true,
+    isInputChanged: false,
   })
+  const isAliasOrUrlValid = useValidator(
+    (aliasOrUrl: string) =>
+      !siteLoaderState.isInputChanged ||
+      (aliasOrUrl &&
+        aliasOrUrl.length >= 3 &&
+        !aliasOrUrl.match(/([\<\>!@#\$%^ &\*])+/i)),
+    `The provided alias should be at least 3 characters long and not contain invalid characters`,
+    false
+  )
 
   const loadSiteInfo = () => {
     getSite(siteLoaderState.value).then(
@@ -32,6 +34,7 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
     setSiteLoaderState({
       value: '',
       isButtonDisabled: true,
+      isInputChanged: false,
     })
   }
 
@@ -68,7 +71,9 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
         ) =>
           setSiteLoaderState({
             value: val,
-            isButtonDisabled: (val && val.length < 3) || !inputIsValid,
+            isButtonDisabled:
+              !inputIsChanged || (val && val.length < 3) || !inputIsValid,
+            isInputChanged: inputIsChanged,
           })
         }
         onKeyPress={handleKeypress}
