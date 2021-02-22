@@ -69,7 +69,9 @@ function ValidatedField({
       },
       action
     )
-    onChange && onChange(state.value, state.isValid, state.isChanged)
+    if (onChange) {
+      onChange(state.value, state.isValid, state.isChanged)
+    }
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +83,9 @@ function ValidatedField({
   }
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    onKeyPress && onKeyPress(event)
+    if (onKeyPress) {
+      onKeyPress(event)
+    }
   }
 
   // TODO: Move style away from here
@@ -91,7 +95,11 @@ function ValidatedField({
   const inputId = `${webPartId}-${id}-validatedField`
   return (
     <>
-      {label ? <label style={{ paddingRight: '4pt'}} htmlFor={inputId}>{label}</label> : null}
+      {label ? (
+        <label style={{ paddingRight: '4pt' }} htmlFor={inputId}>
+          {label}
+        </label>
+      ) : null}
       <input
         id={inputId}
         type="text"

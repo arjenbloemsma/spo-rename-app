@@ -1,6 +1,6 @@
 {
-  "name": "spo-rename-installation-v-2",
-  "version": "0.0.1",
+  "name": "spo-rename-installation-v2",
+  "version": "0.8.0",
   "private": true,
   "main": "lib/index.js",
   "engines": {
