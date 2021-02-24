@@ -1,8 +1,8 @@
-import client from './api-client'
+import { siteClient } from './clients'
 
 function get(alias: string) {
   const endpoint = process.env.SPFX_GET_SITE_ENDPOINT
-  return client(endpoint, {
+  return siteClient(endpoint, {
     method: 'POST',
     body: {
       alias,
@@ -10,14 +10,14 @@ function get(alias: string) {
   })
 }
 
-function rename(alias: string, currentSiteTitle: string, siteTitle: string) {
+function rename(alias: string, siteTitle: string, userName: string) {
   const endpoint = process.env.SPFX_RENAME_SITE_ENDPOINT
-  return client(endpoint, {
+  return siteClient(endpoint, {
     method: 'POST',
     body: {
       alias,
-      currentSiteTitle,
       siteTitle,
+      userName,
     },
   })
 }
