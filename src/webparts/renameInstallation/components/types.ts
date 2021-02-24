@@ -39,9 +39,10 @@ type siteUpdateType = {
 }
 
 type siteClientErrorType = {
+  Message: string
   Error: {
+    Exception: string
     Line: string
-    Message: string
     Position: string
   }
 }
