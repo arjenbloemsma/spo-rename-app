@@ -29,7 +29,7 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
           data,
         })
       },
-      (error: siteClientErrorType) => toast.error(`😱 ${error.Error.Message}`)
+      (error: siteClientErrorType) => toast.error(`😱 ${error.Message}`)
     )
     setSiteLoaderState({
       value: '',

@@ -103,7 +103,7 @@ function SiteTitleEditor() {
                 setSitesToUpdate([])
               },
               (error: siteClientErrorType) =>
-                toast.error(`😱 ${error.Error.Message}`)
+                toast.error(`😱 ${error.Message}`)
             ))
           }}
         >
