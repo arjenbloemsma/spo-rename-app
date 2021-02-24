@@ -41,6 +41,21 @@ function SiteTitleEditor() {
             inputIsChanged: boolean
           ) => {
             if (inputIsChanged && inputIsValid) {
+              // to be implemented
+              /*
+const sitesToUpdate = []
+
+const { filtered, toAdd } = sitesToUpdate.reduce(
+  (acc, curr) => {
+    const index = acc.toAdd.findIndex((i) => i === curr)
+    index === -1 ? acc.filtered.push(curr) : axx.toAdd.splice(index, 1)
+    return acc
+  },
+  { filtered: [], toAdd: [site] }
+)
+
+setSitesToUpdate([...filtered, ...toAdd])
+              */
               const i = sitesToUpdate.findIndex(
                 (s) => s.ServerRelativeUrl === site.ServerRelativeUrl
               )
