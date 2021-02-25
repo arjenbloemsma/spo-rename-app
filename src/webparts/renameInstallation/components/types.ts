@@ -10,7 +10,6 @@ type siteInfoType = {
   Id: string
   Title?: string
   ServerRelativeUrl?: string
-  type?: 'modern' | 'classic'
 }
 
 type siteStateActionType = {
