@@ -1,7 +1,7 @@
 import * as React from 'react'
 import ValidatedField from './ValidatedField'
 import useValidator from './useValidator'
-import { siteInfoType, siteClientErrorType } from './types'
+import { siteClientErrorType, siteInfoReturnType } from './types'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -23,10 +23,10 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
 
   const loadSiteInfo = () => {
     getSite(siteLoaderState.value).then(
-      (data: siteInfoType) => {
+      (site: siteInfoReturnType) => {
         dispatch({
           type: siteActionState.succes,
-          data,
+          data: site.Data,
         })
       },
       (error: siteClientErrorType) => toast.error(`😱 ${error.Message}`)

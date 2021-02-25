@@ -7,9 +7,11 @@ import {
   siteInfoType,
   siteClientErrorType,
   siteUpdateType,
+  siteInfoReturnType,
 } from './types'
 import SiteLoader from './SiteLoader'
 import { siteReducer, siteActionState } from './SiteReducer'
+import { useWebPartContext } from './useWebPartContext'
 import { toast } from 'react-toastify'
 
 const initialSiteState: siteStateType = {
@@ -19,6 +21,9 @@ const initialSiteState: siteStateType = {
 }
 
 function SiteTitleEditor() {
+  const currentUser = useWebPartContext(
+    (context) => context.pageContext.user.loginName
+  )
   const [sitesToUpdate, setSitesToUpdate] = React.useState<siteUpdateType[]>([])
   const [siteState, dispatch] = React.useReducer(siteReducer, initialSiteState)
   const isTitleValid = useValidator(
@@ -91,20 +96,22 @@ function SiteTitleEditor() {
         <button
           disabled={sitesToUpdate.length === 0}
           onClick={() => {
-            sitesToUpdate.forEach((s) => renameSite(
-              s.ServerRelativeUrl.replace('/sites/', ''),
-              s.CurrentSiteTitle,
-              s.SiteTitle
-            ).then(
-              (data: siteInfoType) => {
-                toast.success(
-                  `🥳 Renamed ${s.CurrentSiteTitle} to ${data.Title}`
-                )
-                setSitesToUpdate([])
-              },
-              (error: siteClientErrorType) =>
-                toast.error(`😱 ${error.Message}`)
-            ))
+            sitesToUpdate.forEach((s) =>
+              renameSite(
+                s.ServerRelativeUrl.replace('/sites/', ''),
+                s.SiteTitle,
+                currentUser as any
+              ).then(
+                (site: siteInfoReturnType) => {
+                  toast.success(
+                    `🥳 Renamed ${s.CurrentSiteTitle} to ${site.Data.Title}`
+                  )
+                  setSitesToUpdate([])
+                },
+                (error: siteClientErrorType) =>
+                  toast.error(`😱 ${error.Message}`)
+              )
+            )
           }}
         >
           Rename sites

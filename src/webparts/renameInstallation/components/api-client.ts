@@ -2,7 +2,7 @@ const localStorageKey = '__rename_installation_token__'
 
 // TODO: This is just vanilla JS, need to convert it to TS
 // for now all is defined as any to make it work with TS extenion
-function client(endpoint, {body, ...customConfig}) {
+function client(serviceUrl, endpoint, {body, ...customConfig}) {
   const token = window.localStorage.getItem(localStorageKey)
   const headers: any = {'content-type': 'application/json'}
   if (token) {
@@ -21,7 +21,7 @@ function client(endpoint, {body, ...customConfig}) {
   }
 
   return window
-    .fetch(`${process.env.SPFX_API_URL}/${endpoint}`, config)
+    .fetch(`${serviceUrl}/${endpoint}`, config)
     .then(async response => {
       if (response.status === 401) {
         logout()

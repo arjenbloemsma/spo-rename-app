@@ -12,7 +12,8 @@ function siteReducer(state: siteStateType, action: siteStateActionType) {
     case siteActionState.succes: {
       const sites =
         state.sites.findIndex(
-          (s) => s.ServerRelativeUrl === action.data.ServerRelativeUrl
+          ({ ServerRelativeUrl }) =>
+            ServerRelativeUrl === action.data.ServerRelativeUrl
         ) === -1
           ? [...state.sites, action.data]
           : state.sites

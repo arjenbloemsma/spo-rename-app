@@ -1,3 +1,11 @@
+type siteInfoReturnType = {
+  Data: {
+    Id: string
+    Title?: string
+    ServerRelativeUrl?: string
+  }
+}
+
 type siteInfoType = {
   Id: string
   Title?: string
@@ -50,6 +58,7 @@ type siteClientErrorType = {
 export {
   siteClientErrorType,
   siteInfoType,
+  siteInfoReturnType,
   siteStateActionType,
   siteStateType,
   siteUpdateType,
