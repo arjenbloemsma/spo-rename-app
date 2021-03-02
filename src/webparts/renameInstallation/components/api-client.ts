@@ -2,9 +2,9 @@ const localStorageKey = '__rename_installation_token__'
 
 // TODO: This is just vanilla JS, need to convert it to TS
 // for now all is defined as any to make it work with TS extenion
-function client(serviceUrl, endpoint, {body, ...customConfig}) {
+function client(serviceUrl, endpoint, { body, ...customConfig }) {
   const token = window.localStorage.getItem(localStorageKey)
-  const headers: any = {'content-type': 'application/json'}
+  const headers: any = { 'content-type': 'application/json' }
   if (token) {
     headers.Authorization = `Bearer ${token}`
   }
@@ -20,21 +20,20 @@ function client(serviceUrl, endpoint, {body, ...customConfig}) {
     config.body = JSON.stringify(body)
   }
 
-  return window
-    .fetch(`${serviceUrl}/${endpoint}`, config)
-    .then(async response => {
-      if (response.status === 401) {
-        logout()
-        window.location.assign(String(window.location))
-        return
-      }
-      const data = await response.json()
-      if (response.ok) {
-        return data
-      } else {
-        return Promise.reject(data)
-      }
-    })
+  const fullUrl = endpoint ? `${serviceUrl}/${endpoint}` : serviceUrl
+  return window.fetch(fullUrl, config).then(async (response) => {
+    if (response.status === 401) {
+      logout()
+      window.location.assign(String(window.location))
+      return
+    }
+    const data = await response.json()
+    if (response.ok) {
+      return data
+    } else {
+      return Promise.reject(data)
+    }
+  })
 }
 
 function logout() {
