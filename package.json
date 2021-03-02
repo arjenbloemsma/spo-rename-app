@@ -12,6 +12,7 @@
     "build": "gulp bundle",
     "clean": "gulp clean",
     "test": "jest",
+    "test:watch": "jest --watch",
     "test:coverage": "npm run test -- --watchAll=false"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "@microsoft/sp-module-interfaces": "1.11.0",
     "@microsoft/sp-tslint-rules": "1.11.0",
     "@microsoft/sp-webpart-workbench": "1.11.0",
+    "@testing-library/jest-dom": "5.11.9",
     "@testing-library/react": "11.2.5",
     "@types/es6-promise": "0.0.33",
     "@types/jest": "26.0.20",
@@ -61,9 +63,8 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "transform": {
-      "\\.(js|jsx|ts|tsx)$": "ts-jest"
+      "ˆ.+\\.(ts|tsx)$": "ts-jest"
     },
-    "transformIgnorePatterns": ["/node_modules/"],
     "testMatch": [
       "**/__tests__/**/*.+(ts|tsx|js)"
     ],

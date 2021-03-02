@@ -4,7 +4,7 @@ import {
   validatedFieldReducer,
   validatedFieldActionState,
 } from './ValidatedFieldReducer'
-import { useWebPartContext } from './useWebPartContext'
+// import { useWebPartContext } from './useWebPartContext'
 import { validatedFieldActionType } from './types'
 import { callAll } from './Utils'
 
@@ -20,7 +20,7 @@ function ValidatedField({
   onKeyPress = undefined,
   reducer = validatedFieldReducer,
 }) {
-  const webPartId = useWebPartContext((context) => context.instanceId)
+  const webPartId = 123 //useWebPartContext((context) => context.instanceId)
   const { current: initialState } = React.useRef({
     value: initialValue,
     messages: [],
