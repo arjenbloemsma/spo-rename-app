@@ -10,22 +10,34 @@ const siteActionState = {
 function siteReducer(state: siteStateType, action: siteStateActionType) {
   switch (action.type) {
     case siteActionState.succes: {
-      const sites =
-        state.sites.findIndex(
-          ({ ServerRelativeUrl }) =>
-            ServerRelativeUrl === action.data.ServerRelativeUrl
-        ) === -1
-          ? [...state.sites, action.data]
-          : state.sites
       return {
         ...state,
         error: null,
-        current: action.data,
-        sites,
+        sites: [
+          ...state.sites.filter(
+            ({ ServerRelativeUrl }) =>
+              ServerRelativeUrl !== action.data.ServerRelativeUrl
+          ),
+          action.data,
+        ],
+      }
+    }
+    case siteActionState.loading: {
+      return {
+        ...state,
+        error: null,
+        sites: [...state.sites, action.data],
       }
     }
     case siteActionState.error: {
-      return { ...state, error: action.error, current: null }
+      return {
+        ...state,
+        error: action.error,
+        sites: [
+        ...state.sites.filter(
+          ({ ServerRelativeUrl }) =>
+            ServerRelativeUrl !== action.data.ServerRelativeUrl
+        )]}
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`)

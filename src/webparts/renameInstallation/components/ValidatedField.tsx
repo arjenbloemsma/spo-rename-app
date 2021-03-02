@@ -19,6 +19,7 @@ function ValidatedField({
   onChange = undefined,
   onKeyPress = undefined,
   reducer = validatedFieldReducer,
+  disabled = false,
 }) {
   const webPartId = useWebPartContext((context) => context.instanceId)
   const { current: initialState } = React.useRef({
@@ -108,6 +109,7 @@ function ValidatedField({
         onChange={handleChange}
         onKeyPress={handleKeyPress}
         style={validatedFieldState.isValid ? {} : dangerStyle}
+        disabled={disabled}
       />
       {!validatedFieldState.isValid ? (
         <ul style={{ listStylePosition: 'inside', paddingLeft: 0 }}>

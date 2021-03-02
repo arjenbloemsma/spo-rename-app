@@ -22,6 +22,14 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
   )
 
   const loadSiteInfo = () => {
+    dispatch({
+      type: siteActionState.loading,
+      data: {
+        ServerRelativeUrl: `/sites/${siteLoaderState.value}`,
+        Title: 'Loading...',
+        Id: String(Date.now()),
+      },
+    })
     getSite(siteLoaderState.value).then(
       (site: siteInfoReturnType) => {
         dispatch({
@@ -29,7 +37,16 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
           data: site.Data,
         })
       },
-      (error: siteClientErrorType) => toast.error(`😱 ${error.Message}`)
+      (error: siteClientErrorType) => {
+        dispatch({
+          type: siteActionState.error,
+          error: error.Message,
+          data: {
+            ServerRelativeUrl: `/sites/${siteLoaderState.value}`
+          },
+        })
+        toast.error(`😱 ${error.Message}`)
+      }
     )
     setSiteLoaderState({
       value: '',
@@ -38,7 +55,9 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
     })
   }
 
-  const handleEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleEnterKeyPress = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (event.charCode === 13 && siteLoaderState.isSearchTermValid) {
       loadSiteInfo()
     }
@@ -71,7 +90,7 @@ function SiteLoader({ dispatch, siteActionState, getSite }) {
           setSiteLoaderState({
             value: val,
             isSearchTermValid:
-              inputIsChanged && inputIsValid && (val && val.length >= 3),
+              inputIsChanged && inputIsValid && val && val.length >= 3,
             isInputChanged: inputIsChanged,
           })
         }

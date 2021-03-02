@@ -40,6 +40,7 @@ function SiteTitleEditor() {
           initialValue={site.Title}
           validMessage="Site title is valid"
           validators={[isTitleValid]}
+          disabled={site.Title === 'Loading...'}
           onChange={(
             val: string,
             inputIsValid: boolean,
@@ -100,6 +101,7 @@ function SiteTitleEditor() {
               renameSite(
                 s.ServerRelativeUrl.replace('/sites/', ''),
                 s.SiteTitle,
+                // TODO: type this in the right way
                 currentUser as any
               ).then(
                 (site: siteInfoReturnType) => {
