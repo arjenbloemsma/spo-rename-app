@@ -1,4 +1,4 @@
-import { siteStateType, siteStateActionType } from './types';
+import { siteStateType, siteStateActionType } from './types'
 
 const siteActionState = {
   pending: 'PENDING',
@@ -13,12 +13,31 @@ function siteReducer(state: siteStateType, action: siteStateActionType) {
       return {
         ...state,
         error: null,
-        current: action.data,
+        sites: [
+          ...state.sites.filter(
+            ({ ServerRelativeUrl }) =>
+              ServerRelativeUrl !== action.data.ServerRelativeUrl
+          ),
+          action.data,
+        ],
+      }
+    }
+    case siteActionState.loading: {
+      return {
+        ...state,
+        error: null,
         sites: [...state.sites, action.data],
       }
     }
     case siteActionState.error: {
-      return { ...state, error: action.error, current: null }
+      return {
+        ...state,
+        error: action.error,
+        sites: [
+        ...state.sites.filter(
+          ({ ServerRelativeUrl }) =>
+            ServerRelativeUrl !== action.data.ServerRelativeUrl
+        )]}
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`)
@@ -26,4 +45,4 @@ function siteReducer(state: siteStateType, action: siteStateActionType) {
   }
 }
 
-export {siteReducer, siteActionState}
+export { siteReducer, siteActionState }

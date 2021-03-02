@@ -1,5 +1,4 @@
 import { validatedFieldStateType, validatedFieldActionType } from './types'
-import { callAll } from './Utils';
 
 const validatedFieldActionState = {
   update: 'UPDATE',
@@ -8,19 +7,15 @@ const validatedFieldActionState = {
 
 function validatedFieldReducer(
   state: validatedFieldStateType,
-  {type, value, initialState}: validatedFieldActionType
+  {type, value = '', messages = [], initialState}: validatedFieldActionType
 ) {
   switch (type) {
     case validatedFieldActionState.update: {
-      const temp: string[] = []
-      callAll(...state.validators)(value, (validationResult: string) =>
-        temp.push(validationResult)
-      )
       return {
         ...state,
         value,
-        messages: temp,
-        isValid: temp.length === 0,
+        messages,
+        isValid: messages.length === 0,
         isChanged: value !== initialState.value
       }
     }

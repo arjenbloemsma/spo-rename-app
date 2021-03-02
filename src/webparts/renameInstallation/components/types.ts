@@ -1,8 +1,15 @@
+type siteInfoReturnType = {
+  Data: {
+    Id: string
+    Title?: string
+    ServerRelativeUrl?: string
+  }
+}
+
 type siteInfoType = {
-  alias: string
-  title?: string
-  url?: string
-  type?: 'modern' | 'classic'
+  Id: string
+  Title?: string
+  ServerRelativeUrl?: string
 }
 
 type siteStateActionType = {
@@ -19,7 +26,6 @@ type siteStateType = {
 
 type validatedFieldStateType = {
   value: string
-  validators: Function[]
   messages: string[]
   isValid: boolean
   isChanged: boolean
@@ -27,14 +33,34 @@ type validatedFieldStateType = {
 
 type validatedFieldActionType = {
   value?: string
+  messages?: string[]
+  isValid?: boolean
   initialState: validatedFieldStateType
   type: string
 }
 
+type siteUpdateType = {
+  ServerRelativeUrl: string
+  CurrentSiteTitle: string
+  SiteTitle: string
+}
+
+type siteClientErrorType = {
+  Message: string
+  Error: {
+    Exception: string
+    Line: string
+    Position: string
+  }
+}
+
 export {
+  siteClientErrorType,
   siteInfoType,
+  siteInfoReturnType,
   siteStateActionType,
   siteStateType,
+  siteUpdateType,
   validatedFieldStateType,
   validatedFieldActionType,
 }

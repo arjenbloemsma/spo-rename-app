@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "spo-rename-installation-v-2-client-side-solution",
+    "name": "spo-rename-installation-v2-client-side-solution",
     "id": "0c86ab27-a602-4645-82ef-f093bfc6b25c",
-    "version": "1.0.0.0",
+    "version": "0.9.2.0",
     "includeClientSideAssets": true,
-    "isDomainIsolated": true,
+    "isDomainIsolated": false,
     "developer": {
-      "name": "",
+      "name": "Arjen Bloemsma",
       "websiteUrl": "",
       "privacyUrl": "",
       "termsOfUseUrl": "",
@@ -15,6 +15,6 @@
     }
   },
   "paths": {
-    "zippedPackage": "solution/spo-rename-installation-v-2.sppkg"
+    "zippedPackage": "solution/spo-rename-installation-v2.sppkg"
   }
 }

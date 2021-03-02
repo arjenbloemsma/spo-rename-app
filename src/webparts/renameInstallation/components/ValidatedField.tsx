@@ -6,22 +6,24 @@ import {
 } from './ValidatedFieldReducer'
 import { useWebPartContext } from './useWebPartContext'
 import { validatedFieldActionType } from './types'
+import { callAll } from './Utils'
 
 function ValidatedField({
   id,
-  validators = [],
+  validators = [] as Function[],
   value: controlledValue = undefined,
   initialValue = '',
   label = undefined,
   placeholder = undefined,
   validMessage = undefined,
   onChange = undefined,
+  onKeyPress = undefined,
   reducer = validatedFieldReducer,
+  disabled = false,
 }) {
   const webPartId = useWebPartContext((context) => context.instanceId)
   const { current: initialState } = React.useRef({
     value: initialValue,
-    validators: validators,
     messages: [],
     isValid: true,
     isChanged: false,
@@ -35,17 +37,27 @@ function ValidatedField({
   const value = valueIsControlled ? controlledValue : validatedFieldState.value
 
   const validateValue = () => {
-    console.log('delayed validation', value)
+    const temp: string[] = []
+    callAll(...validators)(value, (validationResult: string) =>
+      temp.push(validationResult)
+    )
+    const action = {
+      type: validatedFieldActionState.update,
+      value,
+      messages: temp,
+      initialState,
+    }
+    dispatchWithOnChange(action)
   }
+
   const delayedInputValidation = React.useCallback(
-    debounce(validateValue, 2200),
+    debounce(validateValue, 400),
     [value]
   )
   React.useEffect(() => {
     delayedInputValidation()
     return delayedInputValidation.cancel
   }, [value, delayedInputValidation])
-
 
   function dispatchWithOnChange(action: validatedFieldActionType) {
     // if (!valueIsControlled) {
@@ -58,7 +70,9 @@ function ValidatedField({
       },
       action
     )
-    onChange && onChange(state.value, state.isValid, state.isChanged)
+    if (onChange) {
+      onChange(state.value, state.isValid, state.isChanged)
+    }
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,6 +83,12 @@ function ValidatedField({
     })
   }
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (onKeyPress) {
+      onKeyPress(event)
+    }
+  }
+
   // TODO: Move style away from here
   const dangerStyle = {
     border: '1px solid red',
@@ -76,14 +96,20 @@ function ValidatedField({
   const inputId = `${webPartId}-${id}-validatedField`
   return (
     <>
-      {label ? <label htmlFor={inputId}>{label}</label> : null}
+      {label ? (
+        <label style={{ paddingRight: '4pt' }} htmlFor={inputId}>
+          {label}
+        </label>
+      ) : null}
       <input
         id={inputId}
         type="text"
         value={value}
         placeholder={placeholder}
         onChange={handleChange}
+        onKeyPress={handleKeyPress}
         style={validatedFieldState.isValid ? {} : dangerStyle}
+        disabled={disabled}
       />
       {!validatedFieldState.isValid ? (
         <ul style={{ listStylePosition: 'inside', paddingLeft: 0 }}>
