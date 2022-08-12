@@ -61,7 +61,10 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "testEnvironment": "node",
+    "testEnvironment": "jsdom",
+    "roots": [
+      "<rootDir>/src"
+    ],
     "transform": {
       "ˆ.+\\.(ts|tsx)$": "ts-jest"
     },
