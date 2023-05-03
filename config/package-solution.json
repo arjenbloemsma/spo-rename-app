@@ -3,7 +3,7 @@
   "solution": {
     "name": "spo-rename-installation-v2-client-side-solution",
     "id": "0c86ab27-a602-4645-82ef-f093bfc6b25c",
-    "version": "0.9.2.0",
+    "version": "0.9.3.1",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "developer": {
