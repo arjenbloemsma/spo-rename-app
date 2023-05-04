@@ -2,10 +2,9 @@
 
 ## Summary
 
-Short summary on functionality and used technologies.
+Simple app that allows non-technical users without administrator rights to rename SharePoint Online sites. It provides functionality to rename multiple sites in one request with clear feedback. 
 
-[picture of the solution in action, if possible]
-
+Build with the SPFx framework (React, TypeScript) and dependend on the endpoints provided by the SPO Provisioning Engine.
 ## Used SharePoint Framework Version
 
 ![version](https://img.shields.io/badge/version-1.11-green.svg)
@@ -13,26 +12,19 @@ Short summary on functionality and used technologies.
 ## Applies to
 
 - [SharePoint Framework](https://aka.ms/spfx)
-- [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-
-> Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
 
 ## Prerequisites
 
-> Any special pre-requisites?
-
-## Solution
-
-Solution|Author(s)
---------|---------
-folder name | Author details (name, company, twitter alias with link)
+This version of SPFx has a hard requirement on Node 10 and Gulp 3.9.1
 
 ## Version history
 
 Version|Date|Comments
 -------|----|--------
-1.1|March 10, 2021|Update comment
-1.0|January 29, 2021|Initial release
+0.9.3|May 2, 2023|Updated endpoints to use v4 of SPO Provisioning Engine
+0.9.2|April 1, 2021|Updated packages
+0.9.1|March 10, 2021|Updated labels
+0.9.0|January 29, 2021|Initial production release
 
 ## Disclaimer
 
@@ -48,26 +40,14 @@ Version|Date|Comments
   - **npm install**
   - **gulp serve**
 
-> Include any additional steps as needed.
+To create a package for production:
 
-## Features
-
-Description of the extension that expands upon high-level summary above.
-
-This extension illustrates the following concepts:
-
-- topic 1
-- topic 2
-- topic 3
-
-> Notice that better pictures and documentation will increase the sample usage and the value you are providing for others. Thanks for your submissions advance.
-
-> Share your web part with others through Microsoft 365 Patterns and Practices program to get visibility and exposure. More details on the community, open-source projects and other activities from http://aka.ms/m365pnp.
+1. gulp clean
+1. gulp bundle --ship
+1. gulp build
+1. gulp package-solution --ship
 
 ## References
 
 - [Getting started with SharePoint Framework](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-- [Building for Microsoft teams](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/build-for-teams-overview)
-- [Use Microsoft Graph in your solution](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/get-started/using-microsoft-graph-apis)
-- [Publish SharePoint Framework applications to the Marketplace](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/publish-to-marketplace-overview)
 - [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 development
